@@ -1,0 +1,1942 @@
+{
+	"info": {
+		"_postman_id": "9e7a1624-0219-4f9c-b326-ff4de0593395",
+		"name": "z BookShelf FICT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14434294"
+	},
+	"item": [
+		{
+			"name": "Genre",
+			"item": [
+				{
+					"name": "GET Before Added",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404 if no genres found\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Correct error message is returned\", function () {\r",
+									"    var responseText = pm.response.text();\r",
+									"    pm.expect(responseText).to.eql(\"Entity Genre is empty\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/genres/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"genres",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains the created genre with ID\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('id');\r",
+									"    pm.expect(jsonData).to.have.property('name');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Store genre ID in environment variable\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.environment.set(\"genreId\", jsonData.id); // Store the \"id\" of the new genre in environment variable\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"name\": \"Western\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/genres/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"genres",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response should be an array\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an('array');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Each genre should have the required fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    jsonData.forEach(function (genre) {\r",
+									"        pm.expect(genre).to.have.property('id');\r",
+									"        pm.expect(genre).to.have.property('name');\r",
+									"    });\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/genres/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"genres",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET BY ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Genre should have the required fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('id');\r",
+									"    pm.expect(jsonData).to.have.property('name');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Correct ID is returned\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.eql(Number(pm.variables.get(\"genreId\"))); // Assuming genreId is stored in environment variables\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/genres/{{genreId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"genres",
+								"{{genreId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Genre should be updated\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.name).to.eql(\"Thriller\"); // Replace with the updated genre name\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Thriller\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/genres/{{genreId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"genres",
+								"{{genreId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE BY ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body should be empty\", function () {\r",
+									"    pm.response.to.have.body(\"\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/genres/{{genreId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"genres",
+								"{{genreId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET BY ID Not Found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404 if genre is not found\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Correct error message is returned\", function () {\r",
+									"    var genreId = pm.environment.get(\"genreId\"); \r",
+									"    var expectedMessage = \"Genre with id: \" + genreId + \" is not present\";\r",
+									"    var responseText = pm.response.text();\r",
+									"    pm.expect(responseText).to.eql(expectedMessage);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/genres/{{genreId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"genres",
+								"{{genreId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Publisher",
+			"item": [
+				{
+					"name": "GET Before Added",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404 if no publishers found\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Correct error message is returned\", function () {\r",
+									"    var responseText = pm.response.text();\r",
+									"    pm.expect(responseText).to.eql(\"Entity Publisher is empty\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/publishers/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"publishers",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains the created publisher with ID\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('id');\r",
+									"    pm.expect(jsonData).to.have.property('name');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Store publisher ID in environment variable\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.environment.set(\"publisherId\", jsonData.id); // Store the \"id\" of the new publisher in the environment\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Prosvetno Delo\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/publishers/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"publishers",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response should be an array\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an('array');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Each publisher should have the required fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    jsonData.forEach(function (publisher) {\r",
+									"        pm.expect(publisher).to.have.property('id');\r",
+									"        pm.expect(publisher).to.have.property('name');\r",
+									"    });\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/publishers/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"publishers",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET BY ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Publisher should have the required fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('id');\r",
+									"    pm.expect(jsonData).to.have.property('name');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Correct ID is returned\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.eql(Number(pm.environment.get(\"publisherId\"))); // Assuming publisherId is stored in the environment\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/publishers/{{publisherId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"publishers",
+								"{{publisherId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Publisher should be updated\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.name).to.eql(\"Tri\"); // Replace with the actual updated publisher name\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Tri\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/publishers/{{publisherId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"publishers",
+								"{{publisherId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET BY NAME",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Publisher should have the required fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('id');\r",
+									"    pm.expect(jsonData).to.have.property('name');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Correct publisher name is returned\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.name).to.eql(\"Tri\"); // Replace with the actual expected publisher name\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/publishers/name/Tri",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"publishers",
+								"name",
+								"Tri"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET BY Invalid NAME",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404 if publisher with the name is not found\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Correct error message is returned\", function () {\r",
+									"    // Extract the publisher name dynamically from the request URL\r",
+									"    var urlParts = pm.request.url.path;\r",
+									"    var publisherName = urlParts[urlParts.length - 1];\r",
+									"    \r",
+									"    // Construct the expected message\r",
+									"    var expectedMessage = \"Publisher with name: \" + publisherName + \" is not present\";\r",
+									"    var responseText = pm.response.text();\r",
+									"    // Assert the correct error message is returned\r",
+									"    pm.expect(responseText).to.eql(expectedMessage);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/publishers/name/Prosvetno",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"publishers",
+								"name",
+								"Prosvetno"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE BY ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body should be empty\", function () {\r",
+									"    pm.response.to.have.body(\"\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/publishers/{{publisherId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"publishers",
+								"{{publisherId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET BY ID Not Found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404 if publisher is not found\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Correct error message is returned\", function () {\r",
+									"    var publisherId = pm.environment.get(\"publisherId\"); \r",
+									"    var expectedMessage = \"Publisher with id: \" + publisherId + \" is not present\";\r",
+									"    var responseText = pm.response.text();\r",
+									"    pm.expect(responseText).to.eql(expectedMessage);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/publishers/{{publisherId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"publishers",
+								"{{publisherId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Author",
+			"item": [
+				{
+					"name": "GET ALL Before Added",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404 if no authors found\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Correct error message is returned\", function () {\r",
+									"    var responseText = pm.response.text();\r",
+									"    pm.expect(responseText).to.eql(\"Entity Author is empty\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/authors/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"authors",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response should contain the created author\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('firstName');\r",
+									"    pm.expect(jsonData).to.have.property('lastName');\r",
+									"    pm.expect(jsonData).to.have.property('birthYear');\r",
+									"});\r",
+									"pm.test(\"Response contains an ID\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('id');\r",
+									"    pm.environment.set(\"authorId\", jsonData.id); // Store the \"id\" in an environment variable\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Veronika\",\r\n    \"lastName\": \"Spasevska\",\r\n    \"birthYear\": \"1977-11-30\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/authors/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"authors",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response should be an array\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an('array');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/authors/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"authors",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET BY ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Author should have the required fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('id');\r",
+									"    pm.expect(jsonData).to.have.property('firstName');\r",
+									"    pm.expect(jsonData).to.have.property('lastName');\r",
+									"    pm.expect(jsonData).to.have.property('birthYear');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Correct ID is returned\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.eql(Number(pm.variables.get(\"authorId\"))); // Convert the variable to a number\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/authors/{{authorId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"authors",
+								"{{authorId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET BY FIRSTNAME",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is an array\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an('array');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"All authors have the firstName 'Veronika'\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    \r",
+									"    jsonData.forEach(function (author) {\r",
+									"        pm.expect(author.firstName).to.eql(\"Veronika\");\r",
+									"    });\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/authors/firstname/Veronika",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"authors",
+								"firstname",
+								"Veronika"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Author should be updated\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.firstName).to.eql(\"Ana\");\r",
+									"    pm.expect(jsonData.lastName).to.eql(\"Karenina\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Ana\",\r\n    \"lastName\": \"Karenina\",\r\n    \"birthYear\": \"1777-11-30\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/authors/{{authorId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"authors",
+								"{{authorId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE BY ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body should be empty\", function () {\r",
+									"    pm.response.to.have.body(\"\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/authors/{{authorId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"authors",
+								"{{authorId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Book",
+			"item": [
+				{
+					"name": "POST",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains the created book with ID\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('id');\r",
+									"    pm.expect(jsonData).to.have.property('title');\r",
+									"    pm.expect(jsonData).to.have.property('rating');\r",
+									"    pm.expect(jsonData).to.have.property('isbn');\r",
+									"    pm.expect(jsonData).to.have.property('publishedDate');\r",
+									"    pm.expect(jsonData).to.have.property('genres');\r",
+									"    pm.expect(jsonData).to.have.property('authors');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Store book ID in environment variable\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.environment.set(\"bookId\", jsonData.id); // Store the \"id\" of the new book in environment variable\r",
+									"});\r",
+									"pm.test(\"Store ISBN in environment variable\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.environment.set(\"bookISBN\", jsonData.isbn); // Store the \"id\" of the new book in environment variable\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"title\": \"TestBook\",\r\n        \"rating\": 1,\r\n        \"isbn\": \"12ssss3\",\r\n        \"publishedDate\": \"2020-12-11T23:00:00.000+00:00\",\r\n        \"genres\": [\r\n            {\r\n                \"id\": {{genreId}}\r\n               \r\n            }\r\n        ],\r\n        \"publishers\": {\r\n            \"id\": {{publisherId}}\r\n           \r\n        },\r\n        \"authors\": [\r\n            {\r\n                \"id\": {{authorId}}\r\n                \r\n            }\r\n        ]\r\n    }\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/books/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"books",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response should be an array\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an('array');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Each book should have the required fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    jsonData.forEach(function (book) {\r",
+									"        pm.expect(book).to.have.property('id');\r",
+									"        pm.expect(book).to.have.property('title');\r",
+									"        pm.expect(book).to.have.property('rating');\r",
+									"        pm.expect(book).to.have.property('isbn');\r",
+									"        pm.expect(book).to.have.property('publishedDate');\r",
+									"        pm.expect(book).to.have.property('genres');\r",
+									"        pm.expect(book).to.have.property('authors');\r",
+									"    });\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/books/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"books",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET BY ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Book should have the required fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('id');\r",
+									"    pm.expect(jsonData).to.have.property('title');\r",
+									"    pm.expect(jsonData).to.have.property('rating');\r",
+									"    pm.expect(jsonData).to.have.property('isbn');\r",
+									"    pm.expect(jsonData).to.have.property('publishedDate');\r",
+									"    pm.expect(jsonData).to.have.property('genres');\r",
+									"    pm.expect(jsonData).to.have.property('authors');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Correct ID is returned\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.eql(Number(pm.environment.get(\"bookId\"))); // Assuming bookId is stored in environment\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/books/{{bookId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"books",
+								"{{bookId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET BY ISBN",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Correct ISBN is returned\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.isbn).to.eql(pm.environment.get(\"bookISBN\")); // Assuming isbn is stored in environment\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/books/isbn/{{bookISBN}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"books",
+								"isbn",
+								"{{bookISBN}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Book should be updated\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.title).to.eql(\"Test\"); // Replace with the updated book title\r",
+									"    pm.expect(jsonData.isbn).to.eql(\"dasdasdasd\"); // Replace with the updated ISBN\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"title\": \"Test\",\r\n        \"rating\": 123321,\r\n        \"isbn\": \"dasdasdasd\",\r\n        \"publishedDate\": \"2015-12-11T23:00:00.000+00:00\",\r\n        \"genres\": [\r\n            {\r\n                \"id\": {{genreId}}\r\n               \r\n            }\r\n        ],\r\n        \"publishers\": {\r\n            \"id\": {{publisherId}}\r\n           \r\n        },\r\n        \"authors\": [\r\n            {\r\n                \"id\": {{authorId}}\r\n                \r\n            }\r\n        ]\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/books/{{bookId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"books",
+								"{{bookId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE BY ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body should be empty\", function () {\r",
+									"    pm.response.to.have.body(\"\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/books/{{bookId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"books",
+								"{{bookId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							"// Send request for creating a Genre and store genreId\r",
+							"pm.sendRequest({\r",
+							"    url: 'http://localhost:8080/api/genres/', \r",
+							"    method: 'POST',\r",
+							"    header: {\r",
+							"        'Content-Type': 'application/json'\r",
+							"    },\r",
+							"    body: {\r",
+							"        mode: 'raw',\r",
+							"        raw: JSON.stringify({\r",
+							"            \"name\": \"Drama\"\r",
+							"        })\r",
+							"    }\r",
+							"}, function (err, res) {\r",
+							"    if (err) {\r",
+							"        console.log(err);\r",
+							"    } else {\r",
+							"        var jsonData = res.json();\r",
+							"        if (jsonData && jsonData.id) {\r",
+							"            pm.environment.set(\"genreId\", jsonData.id);  // Store the genreId in environment variable\r",
+							"            console.log(\"genreId has been set to: \" + jsonData.id);\r",
+							"        }\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"// Send request for creating a Publisher and store publisherId\r",
+							"pm.sendRequest({\r",
+							"    url: 'http://localhost:8080/api/publishers/',  // Use the complete URL\r",
+							"    method: 'POST',\r",
+							"    header: {\r",
+							"        'Content-Type': 'application/json'\r",
+							"    },\r",
+							"    body: {\r",
+							"        mode: 'raw',\r",
+							"        raw: JSON.stringify({\r",
+							"            \"name\": \"Makedonska Kukja\"\r",
+							"        })\r",
+							"    }\r",
+							"}, function (err, res) {\r",
+							"    if (err) {\r",
+							"        console.log(err);\r",
+							"    } else {\r",
+							"        var jsonData = res.json();\r",
+							"        if (jsonData && jsonData.id) {\r",
+							"            pm.environment.set(\"publisherId\", jsonData.id);  // Store the publisherId in environment variable\r",
+							"            console.log(\"publisherId has been set to: \" + jsonData.id);\r",
+							"        }\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"// Send request for creating an Author and store authorId\r",
+							"pm.sendRequest({\r",
+							"    url: 'http://localhost:8080/api/authors/',  // Use the complete URL\r",
+							"    method: 'POST',\r",
+							"    header: {\r",
+							"        'Content-Type': 'application/json'\r",
+							"    },\r",
+							"    body: {\r",
+							"        mode: 'raw',\r",
+							"        raw: JSON.stringify({\r",
+							"            \"firstName\": \"Veronika\",\r",
+							"            \"lastName\": \"Spasevska\",\r",
+							"            \"birthYear\": \"1977-11-30\"\r",
+							"        })\r",
+							"    }\r",
+							"}, function (err, res) {\r",
+							"    if (err) {\r",
+							"        console.log(err);\r",
+							"    } else {\r",
+							"        var jsonData = res.json();\r",
+							"        if (jsonData && jsonData.id) {\r",
+							"            pm.environment.set(\"authorId\", jsonData.id);  // Store the authorId in environment variable\r",
+							"            console.log(\"authorId has been set to: \" + jsonData.id);\r",
+							"        }\r",
+							"    }\r",
+							"});\r",
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "DigitalSource",
+			"item": [
+				{
+					"name": "POST",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response should contain the created digital source\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(jsonData).to.have.property('id');\r",
+									"    pm.expect(jsonData).to.have.property('url');\r",
+									"    pm.expect(jsonData).to.have.property('format');\r",
+									"    pm.expect(jsonData).to.have.property('pages');\r",
+									"    pm.expect(jsonData).to.have.property('book');\r",
+									"    \r",
+									"    // Check the bookId matches the one used in the request\r",
+									"    pm.expect(jsonData.book.id).to.eql(Number(pm.environment.get(\"bookId\")));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Store digitalSourceId in environment variable\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    \r",
+									"    if (jsonData && jsonData.id) {\r",
+									"        pm.environment.set(\"digitalSourceId\", jsonData.id);  // Store the digitalSourceId in environment variable\r",
+									"        console.log(\"digitalSourceId has been updated to: \" + jsonData.id);\r",
+									"    } else {\r",
+									"        console.log(\"No digitalSourceId found in response\");\r",
+									"    }\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"url\": \"kasniporasnissss.com\",\r\n    \"format\": \"PDF\",\r\n    \"pages\": 15,\r\n    \"book\": {\r\n        \"id\": {{bookId}}\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/digitalsources/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"digitalsources",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response should be an array\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an('array');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Each digital source should have the required fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    jsonData.forEach(function (digitalSource) {\r",
+									"        pm.expect(digitalSource).to.have.property('id');\r",
+									"        pm.expect(digitalSource).to.have.property('url');\r",
+									"        pm.expect(digitalSource).to.have.property('format');\r",
+									"        pm.expect(digitalSource).to.have.property('pages');\r",
+									"        pm.expect(digitalSource).to.have.property('book');\r",
+									"    });\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/digitalsources/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"digitalsources",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET BY ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Digital source should have the required fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('id');\r",
+									"    pm.expect(jsonData).to.have.property('url');\r",
+									"    pm.expect(jsonData).to.have.property('format');\r",
+									"    pm.expect(jsonData).to.have.property('pages');\r",
+									"    pm.expect(jsonData).to.have.property('book');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Correct ID is returned\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.eql(Number(pm.environment.get(\"digitalSourceId\"))); // Assuming digitalSourceId is stored in environment\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/digitalsources/{{digitalSourceId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"digitalsources",
+								"{{digitalSourceId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Digital source should be updated\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.url).to.eql(\"makkrvsvadba.com\"); // Replace with the updated URL\r",
+									"    pm.expect(jsonData.format).to.eql(\"PDF\"); // Replace with the updated format\r",
+									"    pm.expect(jsonData.pages).to.eql(99); // Replace with the updated page count\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Correct ID is returned\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.eql(Number(pm.environment.get(\"digitalSourceId\"))); // Assuming digitalSourceId is stored in environment\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"url\": \"makkrvsvadba.com\",\r\n    \"format\": \"PDF\",\r\n    \"pages\": 99,\r\n    \"book\": {\r\n        \"id\": {{bookId}}\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/digitalsources/{{digitalSourceId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"digitalsources",
+								"{{digitalSourceId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE BY ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body should be empty\", function () {\r",
+									"    pm.response.to.have.body(\"\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/digitalsources/{{digitalSourceId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"digitalsources",
+								"{{digitalSourceId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET BY ID Not Found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404 if digital source is not found\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Correct error message is returned\", function () {\r",
+									"    var digitalSourceId = pm.environment.get(\"digitalSourceId\"); // Assuming invalidDigitalSourceId is set in environment\r",
+									"    var expectedMessage = \"DigitalSource with id: \" + digitalSourceId + \" is not present\";\r",
+									"    var responseText = pm.response.text();\r",
+									"    \r",
+									"    pm.expect(responseText).to.eql(expectedMessage);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/digitalsources/{{digitalSourceId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"digitalsources",
+								"{{digitalSourceId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							"// Send request for creating a Genre and store genreId\r",
+							"pm.sendRequest({\r",
+							"    url: 'http://localhost:8080/api/genres/', \r",
+							"    method: 'POST',\r",
+							"    header: {\r",
+							"        'Content-Type': 'application/json'\r",
+							"    },\r",
+							"    body: {\r",
+							"        mode: 'raw',\r",
+							"        raw: JSON.stringify({\r",
+							"            \"name\": \"Western\"\r",
+							"        })\r",
+							"    }\r",
+							"}, function (err, res) {\r",
+							"    if (err) {\r",
+							"        console.log(err);\r",
+							"    } else {\r",
+							"        var jsonData = res.json();\r",
+							"        if (jsonData && jsonData.id) {\r",
+							"            pm.environment.set(\"genreId\", jsonData.id);  // Store the genreId in environment variable\r",
+							"            console.log(\"genreId has been set to: \" + jsonData.id);\r",
+							"        }\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"// Send request for creating a Publisher and store publisherId\r",
+							"pm.sendRequest({\r",
+							"    url: 'http://localhost:8080/api/publishers/',  // Use the complete URL\r",
+							"    method: 'POST',\r",
+							"    header: {\r",
+							"        'Content-Type': 'application/json'\r",
+							"    },\r",
+							"    body: {\r",
+							"        mode: 'raw',\r",
+							"        raw: JSON.stringify({\r",
+							"            \"name\": \"Prosvetno Delo\"\r",
+							"        })\r",
+							"    }\r",
+							"}, function (err, res) {\r",
+							"    if (err) {\r",
+							"        console.log(err);\r",
+							"    } else {\r",
+							"        var jsonData = res.json();\r",
+							"        if (jsonData && jsonData.id) {\r",
+							"            pm.environment.set(\"publisherId\", jsonData.id);  // Store the publisherId in environment variable\r",
+							"            console.log(\"publisherId has been set to: \" + jsonData.id);\r",
+							"        }\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"// Send request for creating an Author and store authorId\r",
+							"pm.sendRequest({\r",
+							"    url: 'http://localhost:8080/api/authors/',  // Use the complete URL\r",
+							"    method: 'POST',\r",
+							"    header: {\r",
+							"        'Content-Type': 'application/json'\r",
+							"    },\r",
+							"    body: {\r",
+							"        mode: 'raw',\r",
+							"        raw: JSON.stringify({\r",
+							"            \"firstName\": \"Veronika\",\r",
+							"            \"lastName\": \"Spasevska\",\r",
+							"            \"birthYear\": \"1977-11-30\"\r",
+							"        })\r",
+							"    }\r",
+							"}, function (err, res) {\r",
+							"    if (err) {\r",
+							"        console.log(err);\r",
+							"    } else {\r",
+							"        var jsonData = res.json();\r",
+							"        if (jsonData && jsonData.id) {\r",
+							"            pm.environment.set(\"authorId\", jsonData.id);  // Store the authorId in environment variable\r",
+							"            console.log(\"authorId has been set to: \" + jsonData.id);\r",
+							"        }\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"// Send request for creating a Book and store bookId\r",
+							"pm.sendRequest({\r",
+							"    url: 'http://localhost:8080/api/books/',  // Use the complete URL\r",
+							"    method: 'POST',\r",
+							"    header: {\r",
+							"        'Content-Type': 'application/json'\r",
+							"    },\r",
+							"    body: {\r",
+							"        mode: 'raw',\r",
+							"        raw: JSON.stringify({\r",
+							"            \"title\": \"TestBook\",\r",
+							"            \"rating\": 1,\r",
+							"            \"isbn\": \"12312adfvasdasasdasdadteasdasstesasdssy\",\r",
+							"            \"publishedDate\": \"2020-12-11T23:00:00.000+00:00\",\r",
+							"            \"genres\": [\r",
+							"                {\r",
+							"                    \"id\": pm.environment.get(\"genreId\")  // Retrieve the genreId from environment variables\r",
+							"                }\r",
+							"            ],\r",
+							"            \"publishers\": {\r",
+							"                \"id\": pm.environment.get(\"publisherId\")  // Retrieve the publisherId from environment variables\r",
+							"            },\r",
+							"            \"authors\": [\r",
+							"                {\r",
+							"                    \"id\": pm.environment.get(\"authorId\")  // Retrieve the authorId from environment variables\r",
+							"                }\r",
+							"            ]\r",
+							"        })\r",
+							"    }\r",
+							"}, function (err, res) {\r",
+							"    if (err) {\r",
+							"        console.log(err);\r",
+							"    } else {\r",
+							"        console.log(\"Response Status: \" + res.status);\r",
+							"        var jsonData = res.json();\r",
+							"        \r",
+							"        if (jsonData && jsonData.id) {\r",
+							"            pm.environment.set(\"bookId\", jsonData.id);  // Store the bookId from the response in environment variable\r",
+							"            console.log(\"bookId has been updated to: \" + jsonData.id);\r",
+							"        } else {\r",
+							"            console.log(\"No bookId found in response\");\r",
+							"        }\r",
+							"    }\r",
+							"});\r",
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	]
+}
